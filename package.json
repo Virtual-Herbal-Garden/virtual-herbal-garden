@@ -1,0 +1,23 @@
+{
+  "name": "web-app-final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Virtual-Herbal-Garden/virtual-herbal-garden.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Virtual-Herbal-Garden/virtual-herbal-garden/issues"
+  },
+  "homepage": "https://github.com/Virtual-Herbal-Garden/virtual-herbal-garden#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1"
+  }
+}
