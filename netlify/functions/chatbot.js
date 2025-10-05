@@ -19,7 +19,8 @@ exports.handler = async (event) => {
         }
 
         // 3. Call the Google AI Model
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        // Change the model to a newer, supported version
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
