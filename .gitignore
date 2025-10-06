@@ -7,3 +7,5 @@ node_modules/
 # Editor and OS files
 .vscode/
 .DS_Store
+# Local Netlify folder
+.netlify
