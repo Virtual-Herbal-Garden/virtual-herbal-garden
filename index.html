@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,193 +8,17 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <style>
-        /* Chat Bot Styles */
-        .chat-bot-icon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .chat-bot-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .chat-bot-icon i {
-            color: white;
-            font-size: 28px;
-        }
-
-        .chat-container {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 350px;
-            height: 450px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .chat-header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            font-weight: bold;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header .close-chat {
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .chat-header .clear-history {
-            cursor: pointer;
-            font-size: 14px;
-            margin-right: 10px;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background-color: #f5f5f5;
-        }
-
-        .message {
-            margin-bottom: 10px;
-            max-width: 80%;
-            padding: 10px;
-            border-radius: 10px;
-            clear: both;
-            word-wrap: break-word;
-        }
-
-        .bot-message {
-            background-color: #e6f7ff;
-            float: left;
-        }
-
-        .user-message {
-            background-color: #dcf8c6;
-            float: right;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .chat-input input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            margin-right: 10px;
-        }
-
-        .chat-input button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .chat-input button:hover {
-            background-color: #45a049;
-        }
-
-        /* Clear float to ensure proper layout */
-        .clearfix:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* Date indicator */
-        .date-indicator {
-            text-align: center;
-            margin: 10px 0;
-            font-size: 12px;
-            color: #777;
-            clear: both;
-        }
-
-        /* Loading spinner */
-        .typing-indicator {
-            display: none;
-            padding: 10px;
-            background-color: #e6f7ff;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            float: left;
-            clear: both;
-        }
-
-        .typing-indicator span {
-            height: 8px;
-            width: 8px;
-            background-color: #4CAF50;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-            animation: typing 1s infinite ease-in-out;
-        }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-5px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
-        }
+        /* (Your existing CSS styles are here - no changes needed) */
+        .chat-bot-icon{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background-color:#4CAF50;border-radius:50%;display:flex;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,.2);z-index:1000;transition:all .3s ease}.chat-bot-icon:hover{transform:scale(1.1)}.chat-bot-icon i{color:#fff;font-size:28px}.chat-container{position:fixed;bottom:90px;right:20px;width:350px;height:450px;background-color:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15);display:none;flex-direction:column;overflow:hidden;z-index:1000}.chat-header{background-color:#4CAF50;color:#fff;padding:15px;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center}.chat-header .close-chat{cursor:pointer;font-size:18px}.chat-header .clear-history{cursor:pointer;font-size:14px;margin-right:10px}.chat-messages{flex-grow:1;padding:15px;overflow-y:auto;background-color:#f5f5f5}.message{margin-bottom:10px;max-width:80%;padding:10px;border-radius:10px;clear:both;word-wrap:break-word}.bot-message{background-color:#e6f7ff;float:left}.user-message{background-color:#dcf8c6;float:right}.chat-input{display:flex;padding:10px;border-top:1px solid #e0e0e0}.chat-input input{flex-grow:1;padding:10px;border:1px solid #ccc;border-radius:20px;margin-right:10px}.chat-input button{background-color:#4CAF50;color:#fff;border:none;padding:10px 15px;border-radius:20px;cursor:pointer}.chat-input button:hover{background-color:#45a049}.clearfix:after{content:"";display:table;clear:both}.date-indicator{text-align:center;margin:10px 0;font-size:12px;color:#777;clear:both}.typing-indicator{display:none;padding:10px;background-color:#e6f7ff;border-radius:10px;margin-bottom:10px;float:left;clear:both}.typing-indicator span{height:8px;width:8px;background-color:#4CAF50;border-radius:50%;display:inline-block;margin-right:5px;animation:typing 1s infinite ease-in-out}.typing-indicator span:nth-child(2){animation-delay:.2s}.typing-indicator span:nth-child(3){animation-delay:.4s}@keyframes typing{0%{transform:translateY(0)}50%{transform:translateY(-5px)}100%{transform:translateY(0)}}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
     <video autoplay muted loop playsinline preload="auto" class="video-background" poster="/images/firstBg.png">
         <source src="/videos/bg-video.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
     </video>
-
     <div class="video-overlay"></div>
-
     <nav class="navbar">
         <ul>
             <li><a href="/index.html" title="Home">Home</a></li>
@@ -205,7 +28,6 @@
             <li><a href="/html/signup.html" title="Sign-Up">Sign-Up</a></li>
         </ul>
     </nav>
-
     <div class="main-container">
         <div class="content">
             <div class="welcome-text">Welcome to Virtual Herbal Garden</div>
@@ -213,16 +35,11 @@
             <div class="quote">"Look deep into nature, and then you will understand everything better."</div>
         </div>
     </div>
-
     <footer class="footer">
         <span>&copy; 2025 Virtual Herbal Garden</span>
         <a href="#top" title="Back to Top">Back to Top</a>
     </footer>
-
-    <div class="chat-bot-icon" id="chatBotIcon">
-        <i class="fas fa-leaf"></i>
-    </div>
-
+    <div class="chat-bot-icon" id="chatBotIcon"><i class="fas fa-leaf"></i></div>
     <div class="chat-container" id="chatContainer">
         <div class="chat-header">
             <span>Virtual Herbal Garden Bot 🌿</span>
@@ -233,199 +50,25 @@
             <div class="message bot-message">
                 Hello! I'm your Virtual Herbal Garden assistant. Ask me about any herbs or medicinal plants! 🌱
             </div>
-            <div class="typing-indicator" id="typingIndicator">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
         </div>
         <div class="chat-input">
             <input type="text" id="userInput" placeholder="Type your question...">
             <button id="sendBtn">Send</button>
         </div>
     </div>
-
     <script>
-        function navigateTo(pageUrl) {
-            window.location.href = pageUrl;
-        }
+        function navigateTo(pageUrl){window.location.href=pageUrl}document.addEventListener("DOMContentLoaded",function(){const t=document.getElementById("chatBotIcon"),e=document.getElementById("chatContainer"),n=document.getElementById("closeChat"),o=document.getElementById("clearHistory"),a=document.getElementById("chatMessages"),s=document.getElementById("userInput"),i=document.getElementById("sendBtn"),c=document.getElementById("typingIndicator");e.style.display="none";const d="/.netlify/functions/chatbot",r="virtualHerbalGardenChatHistory";function l(){try{const t=localStorage.getItem(r);if(t){const e=JSON.parse(t);for(;a.children.length>2;)a.removeChild(a.children[1]);let n="";e.forEach(t=>{const e=new Date(t.timestamp).toLocaleDateString();if(e!==n){n=e;g(n)}const o=document.createElement("div");o.classList.add("message",t.sender==="user"?"user-message":"bot-message"),o.innerHTML=t.message,a.insertBefore(o,c);const s=document.createElement("div");s.className="clearfix",a.insertBefore(s,c)}),a.scrollTop=a.scrollHeight}}catch(t){console.error("Error loading chat history:",t),localStorage.removeItem(r)}}function m(t,e){try{let n=[];const o=localStorage.getItem(r);o&&(n=JSON.parse(o)),n.push({message:t,sender:e,timestamp:(new Date).toISOString()}),n.length>50&&(n=n.slice(n.length-50)),localStorage.setItem(r,JSON.stringify(n))}catch(t){console.error("Error saving chat history:",t)}}function g(t){const e=document.createElement("div");e.className="date-indicator",e.textContent=t,a.insertBefore(e,c)}o.addEventListener("click",function(){if(confirm("Are you sure you want to clear your chat history?")){localStorage.removeItem(r);for(;a.children.length>2;)a.removeChild(a.children[1]);const t=document.createElement("div");t.className="clearfix",a.insertBefore(t,c)}}),l(),t.addEventListener("click",function(){"none"===e.style.display||""===e.style.display?(e.style.display="flex",s.focus()):e.style.display="none"}),n.addEventListener("click",function(){e.style.display="none"}),i.addEventListener("click",u),s.addEventListener("keypress",function(t){"Enter"===t.key&&u()});function u(){const t=s.value.trim();if(""===t)return;p(t,"user"),s.value="";c.style.display="block",a.scrollTop=a.scrollHeight;const e={contents:[{parts:[{text:`You are a friendly and expert herbal gardening assistant called "Virtual Herbal Garden Bot".
+Your job is to help users by answering questions about herbs and medicinal plants. Focus on the following when replying:
+- Give a short description of the plant
+- Mention growing conditions (sunlight, soil, water, climate)
+- Include care tips (watering frequency, harvesting)
+- List uses (medicinal or culinary)
+Keep responses conversational, clear, and helpful. Use emojis where appropriate 🌱☀💧 and structure answers with headings.
+If the user asks about an unknown plant, politely respond that you don't have data on it and suggest popular alternatives like Tulsi, Mint, Aloe Vera, etc.
+Act as a chatbot that replies directly to each user question — no intro or outro, just answer the question naturally and helpfully.
 
-        // Chat Bot Script
-        document.addEventListener('DOMContentLoaded', function () {
-            const chatBotIcon = document.getElementById('chatBotIcon');
-            const chatContainer = document.getElementById('chatContainer');
-            const closeChat = document.getElementById('closeChat');
-            const clearHistory = document.getElementById('clearHistory');
-            const chatMessages = document.getElementById('chatMessages');
-            const userInput = document.getElementById('userInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const typingIndicator = document.getElementById('typingIndicator');
-
-            chatContainer.style.display = 'none';
-
-            // *** NEW *** The URL for our Netlify Function
-            const FUNCTION_URL = '/.netlify/functions/chatbot';
-
-            const CHAT_HISTORY_KEY = 'virtualHerbalGardenChatHistory';
-
-            function loadChatHistory() {
-                try {
-                    const savedHistory = localStorage.getItem(CHAT_HISTORY_KEY);
-                    if (savedHistory) {
-                        const history = JSON.parse(savedHistory);
-                        while (chatMessages.children.length > 2) {
-                            chatMessages.removeChild(chatMessages.children[1]);
-                        }
-                        let currentDate = '';
-                        history.forEach(item => {
-                            const messageDate = new Date(item.timestamp).toLocaleDateString();
-                            if (messageDate !== currentDate) {
-                                currentDate = messageDate;
-                                addDateSeparator(currentDate);
-                            }
-                            const messageDiv = document.createElement('div');
-                            messageDiv.classList.add('message', item.sender === 'user' ? 'user-message' : 'bot-message');
-                            messageDiv.innerHTML = item.message;
-                            chatMessages.insertBefore(messageDiv, typingIndicator);
-                            const clearfixDiv = document.createElement('div');
-                            clearfixDiv.className = 'clearfix';
-                            chatMessages.insertBefore(clearfixDiv, typingIndicator);
-                        });
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                    }
-                } catch (e) {
-                    console.error('Error loading chat history:', e);
-                    localStorage.removeItem(CHAT_HISTORY_KEY);
-                }
-            }
-
-            function saveMessageToHistory(message, sender) {
-                try {
-                    let history = [];
-                    const savedHistory = localStorage.getItem(CHAT_HISTORY_KEY);
-                    if (savedHistory) {
-                        history = JSON.parse(savedHistory);
-                    }
-                    history.push({
-                        message: message,
-                        sender: sender,
-                        timestamp: new Date().toISOString()
-                    });
-                    if (history.length > 50) {
-                        history = history.slice(history.length - 50);
-                    }
-                    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(history));
-                } catch (e) {
-                    console.error('Error saving chat history:', e);
-                }
-            }
-
-            function addDateSeparator(dateString) {
-                const dateDiv = document.createElement('div');
-                dateDiv.className = 'date-indicator';
-                dateDiv.textContent = dateString;
-                chatMessages.insertBefore(dateDiv, typingIndicator);
-            }
-
-            clearHistory.addEventListener('click', function () {
-                if (confirm('Are you sure you want to clear your chat history?')) {
-                    localStorage.removeItem(CHAT_HISTORY_KEY);
-                    while (chatMessages.children.length > 2) {
-                        chatMessages.removeChild(chatMessages.children[1]);
-                    }
-                    const clearfixDiv = document.createElement('div');
-                    clearfixDiv.className = 'clearfix';
-                    chatMessages.insertBefore(clearfixDiv, typingIndicator);
-                }
-            });
-
-            loadChatHistory();
-
-            chatBotIcon.addEventListener('click', function () {
-                if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
-                    chatContainer.style.display = 'flex';
-                    userInput.focus();
-                } else {
-                    chatContainer.style.display = 'none';
-                }
-            });
-
-            closeChat.addEventListener('click', function () {
-                chatContainer.style.display = 'none';
-            });
-
-            sendBtn.addEventListener('click', sendMessage);
-            userInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-
-            function sendMessage() {
-                const message = userInput.value.trim();
-                if (message === '') return;
-
-                addMessage(message, 'user');
-                userInput.value = '';
-
-                typingIndicator.style.display = 'block';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                // *** NEW *** Fetch call to our Netlify Function
-                fetch(FUNCTION_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    // Send the user's message in a simple 'prompt' field
-                    body: JSON.stringify({ prompt: message })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        typingIndicator.style.display = 'none';
-
-                        // *** NEW *** Get the reply from our function's response
-                        const botResponse = data.reply;
-
-                        if (botResponse) {
-                            addMessage(botResponse, 'bot');
-                        } else {
-                            addMessage("I'm having trouble processing your question. Please try again.", 'bot');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        typingIndicator.style.display = 'none';
-                        addMessage("Sorry, I couldn't connect to my knowledge base. Please try again later.", 'bot');
-                    });
-            }
-
-            function addMessage(message, sender) {
-                const today = new Date().toLocaleDateString();
-                const lastDateDiv = Array.from(chatMessages.querySelectorAll('.date-indicator')).pop();
-                if (!lastDateDiv || lastDateDiv.textContent !== today) {
-                    addDateSeparator(today);
-                }
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-                if (sender === 'bot') {
-                    message = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    message = message.replace(/^#\s+(.*?)$/gm, '<h3>$1</h3>');
-                    message = message.replace(/\n/g, '<br>');
-                }
-                messageDiv.innerHTML = message;
-                const clearfixDiv = document.createElement('div');
-                clearfixDiv.className = 'clearfix';
-                chatMessages.insertBefore(messageDiv, typingIndicator);
-                chatMessages.insertBefore(clearfixDiv, typingIndicator);
-                saveMessageToHistory(message, sender);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        });
+User question: ${t}`}]}]};fetch(d,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(e)}).then(t=>{if(!t.ok)throw new Error("Network response was not ok");return t.json()}).then(t=>{c.style.display="none";if(t&&t.content&&t.content.parts&&t.content.parts.length>0){const e=t.content.parts[0].text;p(e,"bot")}else p("I'm having trouble processing your question. Please try again.","bot")}).catch(t=>{console.error("Error:",t),c.style.display="none",p("Sorry, I couldn't connect to my knowledge base. Please try again later.","bot")})}function p(t,e){const n=new Date().toLocaleDateString(),o=Array.from(a.querySelectorAll(".date-indicator")).pop();o&&o.textContent===n||g(n);const s=document.createElement("div");s.classList.add("message",e==="user"?"user-message":"bot-message"),"bot"===e&&(t=t.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>"),t=t.replace(/^#\s+(.*?)$/gm,"<h3>$1</h3>"),t=t.replace(/\n/g,"<br>")),s.innerHTML=t;const i=document.createElement("div");i.className="clearfix",a.insertBefore(s,c),a.insertBefore(i,c),m(t,e),a.scrollTop=a.scrollHeight}});
     </script>
 </body>
-
 </html>
