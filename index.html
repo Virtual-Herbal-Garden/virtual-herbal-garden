@@ -1,24 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Virtual Herbal Garden</title>
+
+    <!-- Fonts & CSS -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <!-- Make sure these files exist at /css/ in your repo (or adjust paths) -->
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/nav.css">
+
+    <!-- Inline critical chat styles (keeps widget fast) -->
     <style>
-        /* (Your existing CSS styles are here - no changes needed) */
-        .chat-bot-icon{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background-color:#4CAF50;border-radius:50%;display:flex;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,.2);z-index:1000;transition:all .3s ease}.chat-bot-icon:hover{transform:scale(1.1)}.chat-bot-icon i{color:#fff;font-size:28px}.chat-container{position:fixed;bottom:90px;right:20px;width:350px;height:450px;background-color:#fff;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15);display:none;flex-direction:column;overflow:hidden;z-index:1000}.chat-header{background-color:#4CAF50;color:#fff;padding:15px;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center}.chat-header .close-chat{cursor:pointer;font-size:18px}.chat-header .clear-history{cursor:pointer;font-size:14px;margin-right:10px}.chat-messages{flex-grow:1;padding:15px;overflow-y:auto;background-color:#f5f5f5}.message{margin-bottom:10px;max-width:80%;padding:10px;border-radius:10px;clear:both;word-wrap:break-word}.bot-message{background-color:#e6f7ff;float:left}.user-message{background-color:#dcf8c6;float:right}.chat-input{display:flex;padding:10px;border-top:1px solid #e0e0e0}.chat-input input{flex-grow:1;padding:10px;border:1px solid #ccc;border-radius:20px;margin-right:10px}.chat-input button{background-color:#4CAF50;color:#fff;border:none;padding:10px 15px;border-radius:20px;cursor:pointer}.chat-input button:hover{background-color:#45a049}.clearfix:after{content:"";display:table;clear:both}.date-indicator{text-align:center;margin:10px 0;font-size:12px;color:#777;clear:both}.typing-indicator{display:none;padding:10px;background-color:#e6f7ff;border-radius:10px;margin-bottom:10px;float:left;clear:both}.typing-indicator span{height:8px;width:8px;background-color:#4CAF50;border-radius:50%;display:inline-block;margin-right:5px;animation:typing 1s infinite ease-in-out}.typing-indicator span:nth-child(2){animation-delay:.2s}.typing-indicator span:nth-child(3){animation-delay:.4s}@keyframes typing{0%{transform:translateY(0)}50%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+        /* Chat Bot Styles */
+        .chat-bot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chat-bot-icon:hover {
+            transform: scale(1.06);
+        }
+
+        .chat-bot-icon i {
+            color: white;
+            font-size: 28px;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            font-family: Roboto, Arial, Helvetica, sans-serif;
+        }
+
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header .close-chat {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .chat-header .clear-history {
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 10px;
+            clear: both;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background-color: #e6f7ff;
+            float: left;
+        }
+
+        .user-message {
+            background-color: #dcf8c6;
+            float: right;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .chat-input button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background-color: #45a049;
+        }
+
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .date-indicator {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #777;
+            clear: both;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            background-color: #e6f7ff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            float: left;
+            clear: both;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-5px)
+            }
+
+            100% {
+                transform: translateY(0)
+            }
+        }
+
+        /* small responsive tweak */
+        @media (max-width:420px) {
+            .chat-container {
+                right: 10px;
+                left: 10px;
+                width: auto;
+                height: 60vh;
+                bottom: 80px;
+            }
+        }
     </style>
+
+    <!-- icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
+    <!-- background video -->
     <video autoplay muted loop playsinline preload="auto" class="video-background" poster="/images/firstBg.png">
         <source src="/videos/bg-video.mp4" type="video/mp4">
         Your browser does not support HTML5 video.
     </video>
     <div class="video-overlay"></div>
+
+    <!-- nav (keeps your original structure) -->
     <nav class="navbar">
         <ul>
             <li><a href="/index.html" title="Home">Home</a></li>
@@ -28,6 +222,8 @@
             <li><a href="/html/signup.html" title="Sign-Up">Sign-Up</a></li>
         </ul>
     </nav>
+
+    <!-- main content (kept unchanged) -->
     <div class="main-container">
         <div class="content">
             <div class="welcome-text">Welcome to Virtual Herbal Garden</div>
@@ -35,40 +231,257 @@
             <div class="quote">"Look deep into nature, and then you will understand everything better."</div>
         </div>
     </div>
+
     <footer class="footer">
         <span>&copy; 2025 Virtual Herbal Garden</span>
         <a href="#top" title="Back to Top">Back to Top</a>
     </footer>
+
+    <!-- Chat widget -->
     <div class="chat-bot-icon" id="chatBotIcon"><i class="fas fa-leaf"></i></div>
-    <div class="chat-container" id="chatContainer">
+
+    <div class="chat-container" id="chatContainer" aria-hidden="true">
         <div class="chat-header">
             <span>Virtual Herbal Garden Bot 🌿</span>
-            <span class="clear-history" id="clearHistory">Clear Chat</span>
-            <span class="close-chat" id="closeChat">×</span>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot-message">
-                Hello! I'm your Virtual Herbal Garden assistant. Ask me about any herbs or medicinal plants! 🌱
+            <div style="display:flex;align-items:center;">
+                <span class="clear-history" id="clearHistory" title="Clear chat history">Clear</span>
+                <span class="close-chat" id="closeChat" title="Close chat">×</span>
             </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+            <div class="message bot-message">Hello! I'm your Virtual Herbal Garden assistant. Ask me about any herbs or
+                medicinal plants! 🌱</div>
             <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
         </div>
+
         <div class="chat-input">
-            <input type="text" id="userInput" placeholder="Type your question...">
-            <button id="sendBtn">Send</button>
+            <input type="text" id="userInput" placeholder="Type your question..." aria-label="Type your question">
+            <button id="sendBtn" aria-label="Send">Send</button>
         </div>
     </div>
-    <script>
-        function navigateTo(pageUrl){window.location.href=pageUrl}document.addEventListener("DOMContentLoaded",function(){const t=document.getElementById("chatBotIcon"),e=document.getElementById("chatContainer"),n=document.getElementById("closeChat"),o=document.getElementById("clearHistory"),a=document.getElementById("chatMessages"),s=document.getElementById("userInput"),i=document.getElementById("sendBtn"),c=document.getElementById("typingIndicator");e.style.display="none";const d="/.netlify/functions/chatbot",r="virtualHerbalGardenChatHistory";function l(){try{const t=localStorage.getItem(r);if(t){const e=JSON.parse(t);for(;a.children.length>2;)a.removeChild(a.children[1]);let n="";e.forEach(t=>{const e=new Date(t.timestamp).toLocaleDateString();if(e!==n){n=e;g(n)}const o=document.createElement("div");o.classList.add("message",t.sender==="user"?"user-message":"bot-message"),o.innerHTML=t.message,a.insertBefore(o,c);const s=document.createElement("div");s.className="clearfix",a.insertBefore(s,c)}),a.scrollTop=a.scrollHeight}}catch(t){console.error("Error loading chat history:",t),localStorage.removeItem(r)}}function m(t,e){try{let n=[];const o=localStorage.getItem(r);o&&(n=JSON.parse(o)),n.push({message:t,sender:e,timestamp:(new Date).toISOString()}),n.length>50&&(n=n.slice(n.length-50)),localStorage.setItem(r,JSON.stringify(n))}catch(t){console.error("Error saving chat history:",t)}}function g(t){const e=document.createElement("div");e.className="date-indicator",e.textContent=t,a.insertBefore(e,c)}o.addEventListener("click",function(){if(confirm("Are you sure you want to clear your chat history?")){localStorage.removeItem(r);for(;a.children.length>2;)a.removeChild(a.children[1]);const t=document.createElement("div");t.className="clearfix",a.insertBefore(t,c)}}),l(),t.addEventListener("click",function(){"none"===e.style.display||""===e.style.display?(e.style.display="flex",s.focus()):e.style.display="none"}),n.addEventListener("click",function(){e.style.display="none"}),i.addEventListener("click",u),s.addEventListener("keypress",function(t){"Enter"===t.key&&u()});function u(){const t=s.value.trim();if(""===t)return;p(t,"user"),s.value="";c.style.display="block",a.scrollTop=a.scrollHeight;const e={contents:[{parts:[{text:`You are a friendly and expert herbal gardening assistant called "Virtual Herbal Garden Bot".
-Your job is to help users by answering questions about herbs and medicinal plants. Focus on the following when replying:
-- Give a short description of the plant
-- Mention growing conditions (sunlight, soil, water, climate)
-- Include care tips (watering frequency, harvesting)
-- List uses (medicinal or culinary)
-Keep responses conversational, clear, and helpful. Use emojis where appropriate 🌱☀💧 and structure answers with headings.
-If the user asks about an unknown plant, politely respond that you don't have data on it and suggest popular alternatives like Tulsi, Mint, Aloe Vera, etc.
-Act as a chatbot that replies directly to each user question — no intro or outro, just answer the question naturally and helpfully.
 
-User question: ${t}`}]}]};fetch(d,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(e)}).then(t=>{if(!t.ok)throw new Error("Network response was not ok");return t.json()}).then(t=>{c.style.display="none";if(t&&t.content&&t.content.parts&&t.content.parts.length>0){const e=t.content.parts[0].text;p(e,"bot")}else p("I'm having trouble processing your question. Please try again.","bot")}).catch(t=>{console.error("Error:",t),c.style.display="none",p("Sorry, I couldn't connect to my knowledge base. Please try again later.","bot")})}function p(t,e){const n=new Date().toLocaleDateString(),o=Array.from(a.querySelectorAll(".date-indicator")).pop();o&&o.textContent===n||g(n);const s=document.createElement("div");s.classList.add("message",e==="user"?"user-message":"bot-message"),"bot"===e&&(t=t.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>"),t=t.replace(/^#\s+(.*?)$/gm,"<h3>$1</h3>"),t=t.replace(/\n/g,"<br>")),s.innerHTML=t;const i=document.createElement("div");i.className="clearfix",a.insertBefore(s,c),a.insertBefore(i,c),m(t,e),a.scrollTop=a.scrollHeight}});
+    <!-- Improved chat script -->
+    <script>
+        function navigateTo(pageUrl) { window.location.href = pageUrl; }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // DOM refs
+            const chatBotIcon = document.getElementById('chatBotIcon');
+            const chatContainer = document.getElementById('chatContainer');
+            const closeChat = document.getElementById('closeChat');
+            const clearHistory = document.getElementById('clearHistory');
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const typingIndicator = document.getElementById('typingIndicator');
+
+            // Config
+            const FUNCTION_URL = '/.netlify/functions/chatbot'; // Netlify function endpoint
+            const CHAT_HISTORY_KEY = 'virtualHerbalGardenChatHistory';
+            let isWaiting = false;
+
+            // Helpers: date separator, storage
+            function addDateSeparator(dateStr) {
+                const d = document.createElement('div');
+                d.className = 'date-indicator';
+                d.textContent = dateStr;
+                chatMessages.insertBefore(d, typingIndicator);
+            }
+
+            function loadChatHistory() {
+                try {
+                    const saved = localStorage.getItem(CHAT_HISTORY_KEY);
+                    if (!saved) return;
+                    const history = JSON.parse(saved);
+                    // clear existing except welcome + typing indicator
+                    while (chatMessages.children.length > 2) chatMessages.removeChild(chatMessages.children[1]);
+                    let lastDate = '';
+                    history.forEach(item => {
+                        const dt = new Date(item.timestamp).toLocaleDateString();
+                        if (dt !== lastDate) { lastDate = dt; addDateSeparator(dt); }
+                        const m = document.createElement('div');
+                        m.classList.add('message', item.sender === 'user' ? 'user-message' : 'bot-message');
+                        m.innerHTML = item.message;
+                        chatMessages.insertBefore(m, typingIndicator);
+                        const cf = document.createElement('div'); cf.className = 'clearfix';
+                        chatMessages.insertBefore(cf, typingIndicator);
+                    });
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (e) {
+                    console.error('Failed to load chat history:', e);
+                    localStorage.removeItem(CHAT_HISTORY_KEY);
+                }
+            }
+
+            function saveMessageToHistory(message, sender) {
+                try {
+                    let arr = [];
+                    const saved = localStorage.getItem(CHAT_HISTORY_KEY);
+                    if (saved) arr = JSON.parse(saved);
+                    arr.push({ message, sender, timestamp: new Date().toISOString() });
+                    if (arr.length > 50) arr = arr.slice(arr.length - 50);
+                    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(arr));
+                } catch (e) { console.error('Failed to save chat history:', e); }
+            }
+
+            // UI helpers
+            function showTyping() { typingIndicator.style.display = 'block'; }
+            function hideTyping() { typingIndicator.style.display = 'none'; }
+            function setWaiting(flag) { isWaiting = flag; sendBtn.disabled = flag; if (flag) sendBtn.style.opacity = 0.6; else sendBtn.style.opacity = 1; }
+
+            function appendMessage(text, sender) {
+                const today = new Date().toLocaleDateString();
+                const lastDateDiv = Array.from(chatMessages.querySelectorAll('.date-indicator')).pop();
+                if (!lastDateDiv || lastDateDiv.textContent !== today) addDateSeparator(today);
+
+                const m = document.createElement('div');
+                m.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+
+                if (sender === 'bot') {
+                    // Convert simple markdown-ish to HTML (safe-ish for your use; don't trust user input)
+                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    text = text.replace(/^#\s+(.*?)$/gm, '<h3>$1</h3>');
+                    text = text.replace(/\n/g, '<br>');
+                }
+
+                m.innerHTML = text;
+                const cf = document.createElement('div'); cf.className = 'clearfix';
+                chatMessages.insertBefore(m, typingIndicator);
+                chatMessages.insertBefore(cf, typingIndicator);
+                saveMessageToHistory(text, sender);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Core: call the Netlify function. This is robust to multiple response shapes.
+            // It accepts a payload shape: { prompt: "..." } or { contents: [ { parts: [{ text: "..." }] } ] }
+            async function callChatFunction(payload) {
+                // payload expected to be an object (we'll send as-is)
+                try {
+                    const resp = await fetch(FUNCTION_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // read text for richer debug if needed
+                    const rawText = await resp.text();
+                    let parsed = null;
+                    try { parsed = rawText ? JSON.parse(rawText) : null; } catch (e) { parsed = rawText; }
+
+                    if (!resp.ok) {
+                        console.error('Server returned non-OK:', resp.status, parsed);
+                        throw { status: resp.status, body: parsed };
+                    }
+
+                    // parsed can be: { reply: "..." }  OR  candidate object { content: { parts: [{ text: "..." }] } } OR something else
+                    if (parsed && typeof parsed === 'object') {
+                        // common case: { reply: "..." }
+                        if (parsed.reply && typeof parsed.reply === 'string') return parsed.reply;
+
+                        // Gemini candidate: { content: { parts: [ { text: "..." } ] } }
+                        if (parsed.content && Array.isArray(parsed.content.parts) && parsed.content.parts.length > 0) {
+                            return parsed.content.parts[0].text;
+                        }
+
+                        // older shape: { content: [ { parts: [...] } ] } or parsed.choices...
+                        if (Array.isArray(parsed.content) && parsed.content.length > 0 && parsed.content[0].parts && parsed.content[0].parts[0] && parsed.content[0].parts[0].text) {
+                            return parsed.content[0].parts[0].text;
+                        }
+
+                        // fallback: find any text-like field
+                        const textCandidate = (function searchForText(o) {
+                            if (!o || typeof o !== 'object') return null;
+                            if (typeof o.text === 'string') return o.text;
+                            for (const k in o) {
+                                if (o.hasOwnProperty(k) && typeof o[k] === 'object') {
+                                    const res = searchForText(o[k]);
+                                    if (res) return res;
+                                }
+                            }
+                            return null;
+                        })(parsed);
+
+                        if (textCandidate) return textCandidate;
+                    }
+
+                    // last-resort: return rawText if it's a string
+                    if (typeof parsed === 'string') return parsed;
+                    return null;
+                } catch (err) {
+                    console.error('callChatFunction error:', err);
+                    throw err;
+                }
+            }
+
+            // send message handler
+            async function sendMessage() {
+                if (isWaiting) return;
+                const text = userInput.value.trim();
+                if (!text) return;
+
+                appendMessage(text, 'user');
+                userInput.value = '';
+                showTyping();
+                setWaiting(true);
+
+                // Try to call using { prompt } (server function supports prompt OR contents)
+                try {
+                    // you can switch to contents shape if you prefer:
+                    // const payload = { contents: [{ parts: [{ text: "User question: " + text }] }] };
+                    const payload = { prompt: text };
+
+                    const reply = await callChatFunction(payload);
+                    hideTyping();
+                    setWaiting(false);
+
+                    if (reply && typeof reply === 'string') {
+                        appendMessage(reply, 'bot');
+                    } else {
+                        appendMessage("I'm having trouble processing your question. Please try again.", 'bot');
+                    }
+                } catch (err) {
+                    hideTyping();
+                    setWaiting(false);
+                    appendMessage("Sorry, I couldn't connect to my knowledge base. Please try again later.", 'bot');
+
+                    // extra debug in console
+                    console.error('Chat request failed:', err);
+                }
+            }
+
+            // Wire buttons and keys
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') sendMessage(); });
+
+            clearHistory.addEventListener('click', function () {
+                if (!confirm('Are you sure you want to clear your chat history?')) return;
+                localStorage.removeItem(CHAT_HISTORY_KEY);
+                while (chatMessages.children.length > 2) chatMessages.removeChild(chatMessages.children[1]);
+                const cf = document.createElement('div'); cf.className = 'clearfix';
+                chatMessages.insertBefore(cf, typingIndicator);
+            });
+
+            chatBotIcon.addEventListener('click', function () {
+                if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
+                    chatContainer.style.display = 'flex';
+                    userInput.focus();
+                    chatContainer.setAttribute('aria-hidden', 'false');
+                } else {
+                    chatContainer.style.display = 'none';
+                    chatContainer.setAttribute('aria-hidden', 'true');
+                }
+            });
+
+            closeChat.addEventListener('click', function () {
+                chatContainer.style.display = 'none';
+                chatContainer.setAttribute('aria-hidden', 'true');
+            });
+
+            // load existing history
+            loadChatHistory();
+        });
     </script>
 </body>
+
 </html>
