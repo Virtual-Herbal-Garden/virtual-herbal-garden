@@ -74,22 +74,10 @@ exports.handler = async (event) => {
             } else if (body.prompt && typeof body.prompt === "string") {
                 contents = [{ parts: [{ text: body.prompt }] }];
             } else {
+                // nothing meaningful, fallback
                 contents = [{ parts: [{ text: "Hello" }] }];
             }
         }
-
-        // 🔥 Force Gemini to respond in English only
-        contents.unshift({
-            role: "user",
-            parts: [
-                {
-                    text:
-                        "You are an English-speaking AI assistant for the Virtual Herbal Garden web app. " +
-                        "Always respond in fluent English, regardless of the user's input language.",
-                },
-            ],
-        });
-
 
         // pick a model (use env OPENAI_MODEL style name? we'll default to gemini-2.0-flash)
         const modelName = process.env.GENERATIVE_MODEL || "gemini-2.0-flash";
