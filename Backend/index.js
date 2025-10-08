@@ -116,4 +116,137 @@ app.post('/api/generate', async (req, res) => {
     }
 
     // Build request payload with system instruction
-    const
+    const requestPayload = {
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: userMessage }]
+        }
+      ],
+      systemInstruction: {
+        parts: [{ text: HERBAL_GARDEN_SYSTEM_INSTRUCTION }]
+      },
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: 1024,
+      }
+    };
+
+    // Build provider URL (Gemini API)
+    const modelName = process.env.GENERATIVE_MODEL || 'gemini-2.0-flash-exp';
+    const providerUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+    // Call Gemini API
+    const providerResp = await axios.post(providerUrl, requestPayload, {
+      timeout: 25000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const responseData = providerResp.data;
+
+    // Validate response structure
+    if (!responseData || !responseData.candidates || responseData.candidates.length === 0) {
+      console.error('Invalid response structure from Gemini');
+      return res.status(502).json({
+        error: 'Invalid AI response',
+        reply: 'I encountered a problem processing your request. Please try again!'
+      });
+    }
+
+    // Extract reply text
+    const candidate = responseData.candidates[0];
+    let replyText = '';
+
+    if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+      replyText = candidate.content.parts[0].text || '';
+    }
+
+    // Additional safety check: detect off-topic responses
+    const offTopicKeywords = [
+      'politics', 'election', 'president', 'government', 'war', 'military',
+      'movie', 'film', 'actor', 'sport', 'football', 'cricket', 'match',
+      'programming', 'code', 'software', 'algorithm', 'javascript',
+      'cryptocurrency', 'bitcoin', 'stock', 'investment'
+    ];
+
+    const lowerReply = replyText.toLowerCase();
+    const seemsOffTopic = offTopicKeywords.some(keyword =>
+      lowerReply.includes(keyword) &&
+      !lowerReply.includes('plant') &&
+      !lowerReply.includes('herb') &&
+      !lowerReply.includes('garden')
+    );
+
+    if (seemsOffTopic) {
+      replyText = "I can only answer questions related to herbs, plants, and gardening. Please ask me about medicinal plants, growing tips, or natural remedies!";
+    }
+
+    // Check for empty response
+    if (!replyText || replyText.trim() === '') {
+      replyText = "I'm not sure how to answer that. Could you rephrase your question about herbs or plants?";
+    }
+
+    // Return formatted response
+    res.json({
+      reply: replyText,
+      candidates: [{
+        content: {
+          parts: [{ text: replyText }]
+        }
+      }]
+    });
+
+  } catch (err) {
+    console.error('/api/generate error:', err?.response?.data || err.message || err);
+
+    // Handle specific error types
+    if (err?.response?.status === 429) {
+      return res.status(429).json({
+        error: 'Rate limit exceeded',
+        reply: 'I\'m receiving too many requests. Please wait a moment and try again.'
+      });
+    }
+
+    if (err?.response?.status === 401 || err?.response?.status === 403) {
+      return res.status(500).json({
+        error: 'Authentication error',
+        reply: 'Service configuration issue. Please contact support.'
+      });
+    }
+
+    if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+      return res.status(504).json({
+        error: 'Request timeout',
+        reply: 'The request took too long. Please try a simpler question.'
+      });
+    }
+
+    // Generic error response
+    res.status(500).json({
+      error: 'Internal server error',
+      reply: 'Sorry, I\'m experiencing technical difficulties. Please try again in a moment.'
+    });
+  }
+});
+
+// Catch-all route: serve index.html for SPA navigation
+app.get('*', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`╔════════════════════════════════════════════════╗`);
+  console.log(`║  Virtual Herbal Garden Backend Server         ║`);
+  console.log(`║  Port: ${PORT.toString().padEnd(40)} ║`);
+  console.log(`║  Environment: ${(process.env.NODE_ENV || 'development').padEnd(31)} ║`);
+  console.log(`║  Domain: herbal-garden (restricted)            ║`);
+  console.log(`╚════════════════════════════════════════════════╝`);
+  console.log(`\n🌿 Server ready at http://localhost:${PORT}`);
+  console.log(`📡 API endpoint: http://localhost:${PORT}/api/generate`);
+  console.log(`💚 Health check: http://localhost:${PORT}/api/health\n`);
+});
