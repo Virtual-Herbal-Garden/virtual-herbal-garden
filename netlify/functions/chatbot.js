@@ -1,5 +1,5 @@
 // netlify/functions/chatbot.js
-// Robust Gemini handler with CORS, better logging, and returns the candidate shape your frontend expects.
+// Herbal Garden specialized chatbot with domain restriction
 
 const safeRequire = (name) => {
     try {
@@ -11,9 +11,37 @@ const safeRequire = (name) => {
 
 const GoogleGenerativeAI = safeRequire("@google/generative-ai")?.GoogleGenerativeAI;
 
+// System instruction to restrict chatbot to herbal garden topics
+const HERBAL_GARDEN_SYSTEM_INSTRUCTION = `You are a specialized Virtual Herbal Garden Assistant. You ONLY answer questions related to:
+
+**ALLOWED TOPICS:**
+- Herbs, medicinal plants, and garden plants
+- Growing tips, cultivation methods, and plant care
+- Soil types, sunlight requirements, watering schedules
+- Fertilizers, composting, and organic gardening
+- Medicinal properties and Ayurvedic uses of plants
+- Health benefits, nutritional value of herbs
+- Harvesting, preservation, and storage of herbs
+- Natural remedies, herbal teas, and home remedies
+- Plant identification and botanical information
+- Pest control using natural methods
+- Companion planting and garden design
+- Seasonal planting guides
+
+**STRICT RULES:**
+1. If a user asks about ANY topic outside the above list (politics, technology, history, entertainment, sports, etc.), respond ONLY with:
+   "I can only answer questions related to herbs, plants, and gardening. Please ask me about medicinal plants, growing tips, or natural remedies!"
+
+2. Be friendly, informative, and encouraging about gardening
+3. Provide practical, actionable advice
+4. Use simple language that beginners can understand
+5. When appropriate, mention safety precautions for medicinal use
+
+Always stay within your domain. Never answer off-topic questions.`;
+
 exports.handler = async (event) => {
     const CORS_HEADERS = {
-        "Access-Control-Allow-Origin": "*", // tighten to your origin later, e.g. https://virtual-herbal-garden-hub.netlify.app
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     };
@@ -33,12 +61,11 @@ exports.handler = async (event) => {
         };
     }
 
-    // Accept common env var names (you can set any of these in Netlify)
+    // Get API key from environment
     const API_KEY =
         process.env.GENERATIVE_API_KEY ||
         process.env.GEMINI_API_KEY ||
         process.env.GOOGLE_API_KEY ||
-        process.env.GENERATIVE_API ||
         process.env.API_KEY;
 
     if (!API_KEY) {
@@ -47,94 +74,138 @@ exports.handler = async (event) => {
             statusCode: 500,
             headers: CORS_HEADERS,
             body: JSON.stringify({
-                error: "Server misconfiguration: missing Gemini API key. Set env var GENERATIVE_API_KEY (recommended).",
+                error: "Server misconfiguration: missing API key.",
             }),
         };
     }
 
     try {
-        // init client (SDK accepts key in constructor in current releases)
+        // Initialize Gemini client
         const genAI = new GoogleGenerativeAI(API_KEY);
 
-        // parse incoming body safely
+        // Parse request body
         let body = {};
         try {
             body = event.body ? JSON.parse(event.body) : {};
         } catch (err) {
-            console.warn("Could not JSON.parse request body, using raw:", err);
-            body = event.body || {};
+            console.warn("Could not parse request body:", err);
+            body = {};
         }
 
-        // The frontend already sends `contents: [{ parts: [{ text: "..."}]}]`
-        // If the frontend uses { message: "..."} we convert to the expected shape.
-        let contents = body.contents;
-        if (!contents) {
-            if (body.message && typeof body.message === "string") {
-                contents = [{ parts: [{ text: body.message }] }];
-            } else if (body.prompt && typeof body.prompt === "string") {
-                contents = [{ parts: [{ text: body.prompt }] }];
-            } else {
-                // nothing meaningful, fallback
-                contents = [{ parts: [{ text: "Hello" }] }];
-            }
+        // Extract user message and domain
+        let userMessage = '';
+        const domain = body.domain || '';
+
+        if (body.prompt && typeof body.prompt === 'string') {
+            userMessage = body.prompt;
+        } else if (body.message && typeof body.message === 'string') {
+            userMessage = body.message;
+        } else if (body.contents && Array.isArray(body.contents) && body.contents[0]?.parts?.[0]?.text) {
+            userMessage = body.contents[0].parts[0].text;
         }
 
-        // pick a model (use env OPENAI_MODEL style name? we'll default to gemini-2.0-flash)
-        const modelName = process.env.GENERATIVE_MODEL || "gemini-2.0-flash";
-
-        // get model instance
-        const model = genAI.getGenerativeModel({ model: modelName });
-
-        // call generateContent. The SDK accepts the contents array directly in many versions.
-        // Some examples call model.generateContent(contents) or model.generateContent({ contents })
-        // We'll try both syntaxes to be robust.
-        let resultPromise;
-        try {
-            // preferred: pass an object (latest SDKs)
-            resultPromise = await model.generateContent({ contents });
-        } catch (e) {
-            // fallback: older SDKs may expect the contents array alone
-            console.warn("generateContent({contents}) failed, trying generateContent(contents):", e?.message);
-            resultPromise = await model.generateContent(contents);
-        }
-
-        // `resultPromise` often has `.response` (a Promise) we need to await
-        const contentResponse = await resultPromise.response;
-
-        // validate response structure
-        if (
-            !contentResponse ||
-            !contentResponse.candidates ||
-            !Array.isArray(contentResponse.candidates) ||
-            contentResponse.candidates.length === 0 ||
-            !contentResponse.candidates[0].content
-        ) {
-            console.error("Invalid response from Gemini:", JSON.stringify(contentResponse).slice(0, 2000));
+        // Validate domain restriction
+        if (domain !== 'herbal-garden') {
+            console.warn('Request without proper domain parameter');
             return {
-                statusCode: 502,
+                statusCode: 400,
                 headers: CORS_HEADERS,
-                body: JSON.stringify({ error: "AI provider returned no candidates.", details: contentResponse }),
+                body: JSON.stringify({
+                    error: "Invalid request: domain parameter required",
+                    reply: "I can only answer questions related to herbs, plants, and gardening."
+                }),
             };
         }
 
-        // Return the first candidate object (this has .content.parts[...] which your frontend expects)
-        const candidate = contentResponse.candidates[0];
+        if (!userMessage || userMessage.trim() === '') {
+            return {
+                statusCode: 400,
+                headers: CORS_HEADERS,
+                body: JSON.stringify({
+                    error: "No message provided",
+                    reply: "Please ask me a question about herbs or plants!"
+                }),
+            };
+        }
 
-        // Helpful: log small portion to Netlify logs for debugging (avoid printing entire content in prod)
-        console.log("Gemini response candidate keys:", Object.keys(candidate));
+        // Get model with system instruction
+        const modelName = process.env.GENERATIVE_MODEL || "gemini-2.0-flash-exp";
 
+        const model = genAI.getGenerativeModel({
+            model: modelName,
+            systemInstruction: HERBAL_GARDEN_SYSTEM_INSTRUCTION
+        });
+
+        // Build conversation context
+        const contents = [
+            {
+                role: "user",
+                parts: [{ text: userMessage }]
+            }
+        ];
+
+        // Generate response
+        const result = await model.generateContent({ contents });
+        const response = await result.response;
+
+        // Validate response structure
+        if (
+            !response ||
+            !response.candidates ||
+            !Array.isArray(response.candidates) ||
+            response.candidates.length === 0 ||
+            !response.candidates[0].content
+        ) {
+            console.error("Invalid response from Gemini");
+            return {
+                statusCode: 502,
+                headers: CORS_HEADERS,
+                body: JSON.stringify({
+                    error: "AI provider returned invalid response",
+                    reply: "I'm having trouble right now. Please try asking your question again!"
+                }),
+            };
+        }
+
+        const candidate = response.candidates[0];
+
+        // Extract text from response
+        let replyText = '';
+        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+            replyText = candidate.content.parts[0].text || '';
+        }
+
+        // Additional safety check: if response seems off-topic, override it
+        const offTopicKeywords = ['politics', 'election', 'president', 'war', 'movie', 'sport', 'technology', 'programming', 'code'];
+        const lowerReply = replyText.toLowerCase();
+        const seemsOffTopic = offTopicKeywords.some(keyword =>
+            lowerReply.includes(keyword) && !lowerReply.includes('plant') && !lowerReply.includes('herb')
+        );
+
+        if (seemsOffTopic) {
+            replyText = "I can only answer questions related to herbs, plants, and gardening. Please ask me about medicinal plants, growing tips, or natural remedies!";
+        }
+
+        // Return response in format expected by frontend
         return {
             statusCode: 200,
             headers: CORS_HEADERS,
-            body: JSON.stringify(candidate),
+            body: JSON.stringify({
+                reply: replyText,
+                content: candidate.content
+            }),
         };
+
     } catch (err) {
-        console.error("Chatbot function error:", err && err.stack ? err.stack : err);
-        // Provide some debug info (safe during development) — remove details in production
+        console.error("Chatbot function error:", err?.message || err);
         return {
             statusCode: 500,
             headers: CORS_HEADERS,
-            body: JSON.stringify({ error: "Failed to get response from AI.", message: err ? err.message || String(err) : "unknown" }),
+            body: JSON.stringify({
+                error: "Failed to get response from AI",
+                message: err?.message || "Unknown error",
+                reply: "Sorry, I'm experiencing technical difficulties. Please try again in a moment."
+            }),
         };
     }
 };

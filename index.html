@@ -8,11 +8,10 @@
 
     <!-- Fonts & CSS -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-    <!-- Make sure these files exist at /css/ in your repo (or adjust paths) -->
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/nav.css">
 
-    <!-- Inline critical chat styles (keeps widget fast) -->
+    <!-- Inline critical chat styles -->
     <style>
         /* Chat Bot Styles */
         .chat-bot-icon {
@@ -188,7 +187,6 @@
             }
         }
 
-        /* small responsive tweak */
         @media (max-width:420px) {
             .chat-container {
                 right: 10px;
@@ -200,7 +198,6 @@
         }
     </style>
 
-    <!-- icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
@@ -212,7 +209,7 @@
     </video>
     <div class="video-overlay"></div>
 
-    <!-- nav (keeps your original structure) -->
+    <!-- nav -->
     <nav class="navbar">
         <ul>
             <li><a href="/index.html" title="Home">Home</a></li>
@@ -223,7 +220,7 @@
         </ul>
     </nav>
 
-    <!-- main content (kept unchanged) -->
+    <!-- main content -->
     <div class="main-container">
         <div class="content">
             <div class="welcome-text">Welcome to Virtual Herbal Garden</div>
@@ -242,7 +239,7 @@
 
     <div class="chat-container" id="chatContainer" aria-hidden="true">
         <div class="chat-header">
-            <span>Virtual Herbal Garden Bot 🌿</span>
+            <span>Herbal Garden Assistant 🌿</span>
             <div style="display:flex;align-items:center;">
                 <span class="clear-history" id="clearHistory" title="Clear chat history">Clear</span>
                 <span class="close-chat" id="closeChat" title="Close chat">×</span>
@@ -250,18 +247,19 @@
         </div>
 
         <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
-            <div class="message bot-message">Hello! I'm your Virtual Herbal Garden assistant. Ask me about any herbs or
-                medicinal plants! 🌱</div>
+            <div class="message bot-message">Hello! I'm your Virtual Herbal Garden assistant. Ask me about herbs,
+                medicinal plants, growing tips, and natural remedies! 🌱</div>
             <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
         </div>
 
         <div class="chat-input">
-            <input type="text" id="userInput" placeholder="Type your question..." aria-label="Type your question">
+            <input type="text" id="userInput" placeholder="Ask about herbs and plants..."
+                aria-label="Type your question">
             <button id="sendBtn" aria-label="Send">Send</button>
         </div>
     </div>
 
-    <!-- Improved chat script -->
+    <!-- Enhanced chat script with domain restriction -->
     <script>
         function navigateTo(pageUrl) { window.location.href = pageUrl; }
 
@@ -276,8 +274,8 @@
             const sendBtn = document.getElementById('sendBtn');
             const typingIndicator = document.getElementById('typingIndicator');
 
-            // Config
-            const FUNCTION_URL = '/.netlify/functions/chatbot'; // Netlify function endpoint
+            // Config - Using Netlify function endpoint
+            const FUNCTION_URL = '/.netlify/functions/chatbot';
             const CHAT_HISTORY_KEY = 'virtualHerbalGardenChatHistory';
             let isWaiting = false;
 
@@ -294,7 +292,6 @@
                     const saved = localStorage.getItem(CHAT_HISTORY_KEY);
                     if (!saved) return;
                     const history = JSON.parse(saved);
-                    // clear existing except welcome + typing indicator
                     while (chatMessages.children.length > 2) chatMessages.removeChild(chatMessages.children[1]);
                     let lastDate = '';
                     history.forEach(item => {
@@ -328,7 +325,11 @@
             // UI helpers
             function showTyping() { typingIndicator.style.display = 'block'; }
             function hideTyping() { typingIndicator.style.display = 'none'; }
-            function setWaiting(flag) { isWaiting = flag; sendBtn.disabled = flag; if (flag) sendBtn.style.opacity = 0.6; else sendBtn.style.opacity = 1; }
+            function setWaiting(flag) {
+                isWaiting = flag;
+                sendBtn.disabled = flag;
+                sendBtn.style.opacity = flag ? 0.6 : 1;
+            }
 
             function appendMessage(text, sender) {
                 const today = new Date().toLocaleDateString();
@@ -339,7 +340,6 @@
                 m.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
 
                 if (sender === 'bot') {
-                    // Convert simple markdown-ish to HTML (safe-ish for your use; don't trust user input)
                     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     text = text.replace(/^#\s+(.*?)$/gm, '<h3>$1</h3>');
                     text = text.replace(/\n/g, '<br>');
@@ -353,43 +353,47 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Core: call the Netlify function. This is robust to multiple response shapes.
-            // It accepts a payload shape: { prompt: "..." } or { contents: [ { parts: [{ text: "..." }] } ] }
-            async function callChatFunction(payload) {
-                // payload expected to be an object (we'll send as-is)
+            // Core: call the Netlify function with domain restriction
+            async function callChatFunction(userMessage) {
                 try {
+                    const payload = {
+                        prompt: userMessage,
+                        domain: 'herbal-garden' // CRITICAL: Domain restriction parameter
+                    };
+
                     const resp = await fetch(FUNCTION_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
-                    // read text for richer debug if needed
                     const rawText = await resp.text();
                     let parsed = null;
-                    try { parsed = rawText ? JSON.parse(rawText) : null; } catch (e) { parsed = rawText; }
+                    try {
+                        parsed = rawText ? JSON.parse(rawText) : null;
+                    } catch (e) {
+                        parsed = rawText;
+                    }
 
                     if (!resp.ok) {
                         console.error('Server returned non-OK:', resp.status, parsed);
                         throw { status: resp.status, body: parsed };
                     }
 
-                    // parsed can be: { reply: "..." }  OR  candidate object { content: { parts: [{ text: "..." }] } } OR something else
+                    // Handle different response formats
                     if (parsed && typeof parsed === 'object') {
-                        // common case: { reply: "..." }
                         if (parsed.reply && typeof parsed.reply === 'string') return parsed.reply;
 
-                        // Gemini candidate: { content: { parts: [ { text: "..." } ] } }
                         if (parsed.content && Array.isArray(parsed.content.parts) && parsed.content.parts.length > 0) {
                             return parsed.content.parts[0].text;
                         }
 
-                        // older shape: { content: [ { parts: [...] } ] } or parsed.choices...
-                        if (Array.isArray(parsed.content) && parsed.content.length > 0 && parsed.content[0].parts && parsed.content[0].parts[0] && parsed.content[0].parts[0].text) {
+                        if (Array.isArray(parsed.content) && parsed.content.length > 0 &&
+                            parsed.content[0].parts && parsed.content[0].parts[0] &&
+                            parsed.content[0].parts[0].text) {
                             return parsed.content[0].parts[0].text;
                         }
 
-                        // fallback: find any text-like field
                         const textCandidate = (function searchForText(o) {
                             if (!o || typeof o !== 'object') return null;
                             if (typeof o.text === 'string') return o.text;
@@ -405,7 +409,6 @@
                         if (textCandidate) return textCandidate;
                     }
 
-                    // last-resort: return rawText if it's a string
                     if (typeof parsed === 'string') return parsed;
                     return null;
                 } catch (err) {
@@ -414,7 +417,7 @@
                 }
             }
 
-            // send message handler
+            // Send message handler
             async function sendMessage() {
                 if (isWaiting) return;
                 const text = userInput.value.trim();
@@ -425,13 +428,8 @@
                 showTyping();
                 setWaiting(true);
 
-                // Try to call using { prompt } (server function supports prompt OR contents)
                 try {
-                    // you can switch to contents shape if you prefer:
-                    // const payload = { contents: [{ parts: [{ text: "User question: " + text }] }] };
-                    const payload = { prompt: text };
-
-                    const reply = await callChatFunction(payload);
+                    const reply = await callChatFunction(text);
                     hideTyping();
                     setWaiting(false);
 
@@ -444,15 +442,15 @@
                     hideTyping();
                     setWaiting(false);
                     appendMessage("Sorry, I couldn't connect to my knowledge base. Please try again later.", 'bot');
-
-                    // extra debug in console
                     console.error('Chat request failed:', err);
                 }
             }
 
             // Wire buttons and keys
             sendBtn.addEventListener('click', sendMessage);
-            userInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') sendMessage(); });
+            userInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') sendMessage();
+            });
 
             clearHistory.addEventListener('click', function () {
                 if (!confirm('Are you sure you want to clear your chat history?')) return;
@@ -478,7 +476,6 @@
                 chatContainer.setAttribute('aria-hidden', 'true');
             });
 
-            // load existing history
             loadChatHistory();
         });
     </script>
