@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garden Dashboard | Virtual Herbal Garden</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/categories.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">🌿 Virtual <span>Herbal Garden</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="html/categories.html">Categories</a></li>
+      <li><a href="html/3d_garden.html">3D Garden</a></li>
+      <li><a href="html/quizzes.html">Quiz</a></li>
+      <li><a href="html/experts.html">Experts</a></li>
+      <li><a href="html/contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main style="padding: 2.5rem 4rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem; margin-bottom:2rem;">
+      <div>
+        <h1 style="font-size: 2.4rem; color: #fff;">Botanical Repository <span>Dashboard</span></h1>
+        <p style="color: var(--text-muted);">Total 13 categorized medicinal specimens currently digitized with clinical profiles.</p>
+      </div>
+      <div>
+        <input type="text" id="searchInput" placeholder="Search plant name, botanical, or use..." onkeyup="filterPlants()" style="padding: 0.8rem 1.4rem; border-radius: 25px; border: 1px solid var(--border); background: var(--card-bg); color: white; width: 320px; font-size: 0.95rem;">
+      </div>
+    </div>
+
+    <div class="plant-grid" id="plantsGrid">
+      
+    <div class="plant-card">
+      <img src="images/tulsi03.jpg" alt="Tulsi (Holy Basil)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Medicinal Herbs / Adaptogens</span>
+        <h3>Tulsi (Holy Basil)</h3>
+        <p class="botanical-name">Ocimum tenuiflorum</p>
+        <p>Potent immunomodulatory agent enhancing natural killer (NK) cell activity.</p>
+        <a href="plants_html/tulsi.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Aloe Vera.jpg" alt="Aloe Vera (Ghritkumari)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Dermatological & Digestive Herbs</span>
+        <h3>Aloe Vera (Ghritkumari)</h3>
+        <p class="botanical-name">Aloe barbadensis miller</p>
+        <p>Accelerates dermal wound healing, collagen synthesis, and first/second-degree burn recovery.</p>
+        <a href="plants_html/aloevera.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Ashwagandha.jpg" alt="Ashwagandha (Indian Ginseng)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Rasayana / Rejuvenative & Nootropic</span>
+        <h3>Ashwagandha (Indian Ginseng)</h3>
+        <p class="botanical-name">Withania somnifera</p>
+        <p>Regulates HPA axis activity, lowering chronic serum cortisol and anxiety.</p>
+        <a href="plants_html/ashwagandha.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/bacopa.jpg" alt="Brahmi (Water Hyssop)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Medhya Rasayana / Brain Tonics</span>
+        <h3>Brahmi (Water Hyssop)</h3>
+        <p class="botanical-name">Bacopa monnieri</p>
+        <p>Facilitates synaptic transmission and nerve impulse repair in hippocampal neurons.</p>
+        <a href="plants_html/bacopa_monnieri.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Turmeric plant.jpeg" alt="Turmeric (Haridra)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Anti-inflammatory & Hepatoprotective</span>
+        <h3>Turmeric (Haridra)</h3>
+        <p class="botanical-name">Curcuma longa</p>
+        <p>Inhibits NF-κB inflammatory signaling and COX-2 enzyme expression.</p>
+        <a href="plants_html/turmeric.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Ginger.webp" alt="Ginger (Adrak / Shunthi)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Digestive & Circulatory Stimulant</span>
+        <h3>Ginger (Adrak / Shunthi)</h3>
+        <p class="botanical-name">Zingiber officinale</p>
+        <p>Effective anti-emetic relieving motion sickness, morning sickness, and chemotherapy nausea.</p>
+        <a href="plants_html/ginger.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Clove.jpg" alt="Clove (Lavanga)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Analgesic & Antimicrobial</span>
+        <h3>Clove (Lavanga)</h3>
+        <p class="botanical-name">Syzygium aromaticum</p>
+        <p>Topical dental local anesthetic for toothache, pulpitis, and oral aphthous ulcers.</p>
+        <a href="plants_html/clove.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Cardamom.jpg" alt="Cardamom (Elaichi)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Digestive & Aromatic Herb</span>
+        <h3>Cardamom (Elaichi)</h3>
+        <p class="botanical-name">Elettaria cardamomum</p>
+        <p>Freshens breath and eradicates pathogenic oral bacteria causing halitosis.</p>
+        <a href="plants_html/cardamom.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/Cinnamon.jpg" alt="Cinnamon (Dalchini)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Metabolic & Cardiovascular Tonic</span>
+        <h3>Cinnamon (Dalchini)</h3>
+        <p class="botanical-name">Cinnamomum verum</p>
+        <p>Mimics insulin function and activates cellular glucose uptake via GLUT-4 transporters.</p>
+        <a href="plants_html/cinnamon.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/chamomile.jpg" alt="Chamomile (Babuna)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Nervine Sedative & Spasmolytic</span>
+        <h3>Chamomile (Babuna)</h3>
+        <p class="botanical-name">Matricaria chamomilla</p>
+        <p>Apigenin binds to benzodiazepine GABA-A receptors, inducing tranquil restful sleep.</p>
+        <a href="plants_html/chamomile.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/berberry.jpg" alt="Barberry / Daruharidra">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Hepatobiliary & Glycemic Regulator</span>
+        <h3>Barberry / Daruharidra</h3>
+        <p class="botanical-name">Berberis vulgaris</p>
+        <p>Berberine activates AMPK pathway, regulating cellular energy metabolism and lipid homeostasis.</p>
+        <a href="plants_html/barberry.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/kala.jpg" alt="Pashanbheda / Miracle Leaf">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Lithotriptic & Nephroprotective</span>
+        <h3>Pashanbheda / Miracle Leaf</h3>
+        <p class="botanical-name">Kalanchoe pinnata</p>
+        <p>Proven lithotriptic activity that inhibits calcium oxalate crystal nucleation in kidneys.</p>
+        <a href="plants_html/kalnchoe.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    <div class="plant-card">
+      <img src="images/saffron.jpg" alt="Saffron (Kesar / Kumkuma)">
+      <div class="plant-card-body">
+        <span class="meta-badge" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.4rem;">Varnya / Neuroprotective & Mood Tonic</span>
+        <h3>Saffron (Kesar / Kumkuma)</h3>
+        <p class="botanical-name">Crocus sativus</p>
+        <p>Clinically demonstrated mood uplifting effect matching selective serotonin reuptake modulators.</p>
+        <a href="plants_html/saffron.html" class="view-btn">View Detailed Analysis</a>
+      </div>
+    </div>
+
+    </div>
+  </main>
+
+  <script>
+    function filterPlants() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.plant-card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    }
+  </script>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Virtual Herbal Garden - SSBT's College of Engineering and Technology, Jalgaon.
+    </div>
+  </footer>
+</body>
+</html>

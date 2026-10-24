@@ -1,0 +1,246 @@
+:root {
+  --primary: #2d6a4f;
+  --primary-light: #40916c;
+  --primary-dark: #1b4332;
+  --accent: #d8f3dc;
+  --gold: #d4a373;
+  --bg-dark: #081c15;
+  --card-bg: #112d23;
+  --text-main: #f8f9fa;
+  --text-muted: #b7e4c7;
+  --border: #2d6a4f;
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #081c15 0%, #112d23 50%, #081c15 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 4rem;
+  background: rgba(8, 28, 21, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav-brand span {
+  color: var(--gold);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: #fff;
+  background: rgba(64, 145, 108, 0.25);
+}
+
+.nav-btn {
+  background: linear-gradient(135deg, #2d6a4f, #40916c);
+  color: white !important;
+  padding: 0.5rem 1.4rem !important;
+  border-radius: 30px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 15px rgba(45, 106, 79, 0.4);
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(64, 145, 108, 0.5);
+}
+
+/* Footer */
+.footer {
+  background: #040d0a;
+  border-top: 1px solid var(--border);
+  padding: 3rem 4rem 1.5rem;
+  margin-top: 5rem;
+  color: var(--text-muted);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.footer h4 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.footer ul {
+  list-style: none;
+}
+
+.footer ul li {
+  margin-bottom: 0.6rem;
+}
+
+.footer ul a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer ul a:hover {
+  color: white;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(45, 106, 79, 0.3);
+  font-size: 0.85rem;
+}
+
+.hero {
+  padding: 5rem 4rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.hero-content h1 {
+  font-size: 3.2rem;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+.hero-content h1 span {
+  color: var(--gold);
+}
+.hero-content p {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+.hero-btns {
+  display: flex;
+  gap: 1.2rem;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #2d6a4f, #52b788);
+  color: white;
+  padding: 0.85rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 5px 20px rgba(45, 106, 79, 0.5);
+}
+.btn-secondary {
+  border: 2px solid var(--primary-light);
+  color: var(--accent);
+  padding: 0.8rem 1.8rem;
+  border-radius: 30px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 3rem 4rem;
+}
+.plant-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.plant-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--gold);
+}
+.plant-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.plant-card-body {
+  padding: 1.4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.plant-card-body h3 {
+  font-size: 1.3rem;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.botanical-name {
+  font-style: italic;
+  color: var(--gold);
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+.plant-card-body p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.2rem;
+  flex-grow: 1;
+}
+.view-btn {
+  background: rgba(64, 145, 108, 0.3);
+  border: 1px solid var(--primary-light);
+  color: white;
+  padding: 0.55rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.view-btn:hover {
+  background: var(--primary);
+}

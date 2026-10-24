@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Inquiries | Virtual Herbal Garden</title>
+  <link rel="stylesheet" href="../css/contact.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">🌿 Virtual <span>Herbal Garden</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../dashboard.html">Dashboard</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="3d_garden.html">3D Garden</a></li>
+      <li><a href="quizzes.html">Quiz</a></li>
+      <li><a href="experts.html">Experts</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="contact-container">
+    <div>
+      <h1 style="color: var(--gold); font-size: 2.2rem; margin-bottom: 1rem;">Get in Touch</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">Have questions regarding botanical taxonomies, research collaborations, or medicinal plant specimens? Send a direct inquiry to our academic development team.</p>
+      <div style="color: var(--text-muted); font-size: 0.95rem;">
+        <p style="margin-bottom: 0.8rem;">📍 <strong>Department:</strong> Computer Engineering Dept, SSBT's COET</p>
+        <p style="margin-bottom: 0.8rem;">🏛️ <strong>Affiliation:</strong> KBC North Maharashtra University, Jalgaon</p>
+        <p>✉️ <strong>Email:</strong> botanical.support@herbalgarden.ssbt.ac.in</p>
+      </div>
+    </div>
+
+    <div>
+      <form onsubmit="handleContact(event)">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" id="cName" required placeholder="Dr. / Mr. / Ms. Name">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="cEmail" required placeholder="name@institution.edu">
+        </div>
+        <div class="form-group">
+          <label>Subject / Plant Specimen</label>
+          <input type="text" id="cSub" placeholder="Taxonomy inquiry / Specimen data">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="cMsg" required placeholder="Describe your question or research inquiry..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send Message to Team</button>
+      </form>
+      <div id="cAlert" style="display:none; margin-top:1rem; padding:0.8rem; background:rgba(64,145,108,0.3); border:1px solid var(--primary-light); border-radius:8px; color:#fff; text-align:center;">Message dispatched successfully!</div>
+    </div>
+  </main>
+
+  <script>
+    function handleContact(e) {
+      e.preventDefault();
+      document.getElementById('cAlert').style.display = 'block';
+      setTimeout(() => {
+        alert('Thank you! Your botanical inquiry has been registered with the Virtual Herbal Garden team.');
+        e.target.reset();
+      }, 300);
+    }
+  </script>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Virtual Herbal Garden - Academic & Research Communications.
+    </div>
+  </footer>
+</body>
+</html>

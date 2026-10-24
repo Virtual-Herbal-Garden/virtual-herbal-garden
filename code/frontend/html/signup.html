@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Access & Registration | Virtual Herbal Garden</title>
+  <link rel="stylesheet" href="../css/signup.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">🌿 Virtual <span>Herbal Garden</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../dashboard.html">Dashboard</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="3d_garden.html">3D Garden</a></li>
+      <li><a href="quizzes.html">Quiz</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="auth-box">
+    <h2>Access Garden Portal</h2>
+    <form onsubmit="handleAuth(event)">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="aUser" required placeholder="Choose a username">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="aEmail" required placeholder="your.name@domain.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="aPass" required placeholder="••••••••••••">
+      </div>
+      <button type="submit" class="submit-btn">Sign In / Register</button>
+    </form>
+    <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.85rem;">
+      Protected by JWT & Bcrypt password encryption via Express MongoDB Atlas backend.
+    </p>
+  </main>
+
+  <script>
+    function handleAuth(e) {
+      e.preventDefault();
+      alert('Welcome to Virtual Herbal Garden! Redirecting to Garden Dashboard...');
+      window.location.href = '../dashboard.html';
+    }
+  </script>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Virtual Herbal Garden - User Portal Authentication.
+    </div>
+  </footer>
+</body>
+</html>

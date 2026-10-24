@@ -1,11 +1,42 @@
 # Dependencies
 node_modules/
+.npm/
 
-# Environment variables
+# Environment Variables & Secrets (CRITICAL)
 .env
+*.env
+*.env.local
+*.env.*.local
+code/backend/.env
 
-# Editor and OS files
-.vscode/
+# Local Quarantine Directory Contents (Preserve manifests only)
+delete_folder/*
+!delete_folder/README.md
+!delete_folder/QUARANTINE_MANIFEST.md
+
+# Logs & Debugging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System & OS Files
 .DS_Store
-# Local Netlify folder
-.netlify
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Configurations
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Build & Temporary Files
+dist/
+build/
+tmp/
+scratch/
+*.zip
+*.tar.gz
+*.rar

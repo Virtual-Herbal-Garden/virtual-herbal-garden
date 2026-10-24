@@ -1,17 +1,28 @@
 {
-  "name": "web-app-final",
+  "name": "virtual-herbal-garden",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Interactive botanical educational platform and 3D medicinal plant repository",
+  "main": "code/backend/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node code/backend/index.js",
+    "test": "node scripts/test-runner.js",
+    "test:backend": "node code/backend/test.js",
+    "dev:backend": "node code/backend/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Virtual-Herbal-Garden/virtual-herbal-garden.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ayurveda",
+    "botany",
+    "medicinal-plants",
+    "threejs",
+    "3d-models",
+    "herbal-garden",
+    "education"
+  ],
+  "author": "SSBT's College of Engineering & Technology, Bambhori, Jalgaon",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Virtual-Herbal-Garden/virtual-herbal-garden/issues"
