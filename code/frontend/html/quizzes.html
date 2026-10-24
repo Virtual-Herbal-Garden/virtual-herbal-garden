@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayurvedic Botanical Quiz | Virtual Herbal Garden</title>
+  <link rel="stylesheet" href="../css/quizzes.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">🌿 Virtual <span>Herbal Garden</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../dashboard.html">Dashboard</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="3d_garden.html">3D Garden</a></li>
+      <li><a href="quizzes.html" class="active">Quiz</a></li>
+      <li><a href="experts.html">Experts</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="quiz-box">
+    <h1 style="color: var(--gold); font-size: 2.2rem; margin-bottom: 0.5rem; text-align: center;">Ayurvedic Herbal Knowledge Challenge</h1>
+    <p style="color: var(--text-muted); text-align: center; margin-bottom: 2.5rem;">Test your knowledge of botanical identification, phytochemicals, and therapeutic applications.</p>
+
+    <div id="quizContainer">
+      <div class="question-card" id="qCard">
+        <h3 id="qTitle" style="color: #fff; font-size: 1.3rem; margin-bottom: 1.2rem;">Question 1: Which plant is botanically known as Ocimum tenuiflorum?</h3>
+        <button class="option-btn" onclick="checkAnswer(0)">Aloe Vera</button>
+        <button class="option-btn" onclick="checkAnswer(1)">Tulsi (Holy Basil)</button>
+        <button class="option-btn" onclick="checkAnswer(2)">Ashwagandha</button>
+        <button class="option-btn" onclick="checkAnswer(3)">Brahmi</button>
+      </div>
+      <div id="scoreBox" style="display:none; text-align:center; padding: 2rem;">
+        <h2 style="color: var(--accent); font-size: 2rem; margin-bottom: 1rem;">Quiz Completed!</h2>
+        <p id="scoreText" style="color: var(--gold); font-size: 1.4rem; font-weight: 600;"></p>
+        <button onclick="location.reload()" class="option-btn" style="width: auto; margin: 1.5rem auto 0; padding: 0.8rem 2rem; background: var(--primary);">Retake Quiz</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        q: "Which plant is botanically known as Ocimum tenuiflorum?",
+        options: ["Aloe Vera", "Tulsi (Holy Basil)", "Ashwagandha", "Brahmi"],
+        correct: 1
+      },
+      {
+        q: "What is the primary active anti-inflammatory constituent in Turmeric?",
+        options: ["Withanolide A", "Curcumin", "Eugenol", "Allicin"],
+        correct: 1
+      },
+      {
+        q: "Which herb is celebrated in Ayurveda as a premier Medhya Rasayana (Brain Tonic)?",
+        options: ["Clove", "Ginger", "Brahmi (Bacopa monnieri)", "Cinnamon"],
+        correct: 2
+      },
+      {
+        q: "Which plant leaf is famous for its lithotriptic (kidney-stone dissolving) property known as Pashanbheda?",
+        options: ["Kalanchoe pinnata", "Matricaria chamomilla", "Berberis vulgaris", "Crocus sativus"],
+        correct: 0
+      },
+      {
+        q: "What aromatic bud contains 70-90% Eugenol and is widely used for dental analgesia?",
+        options: ["Cardamom", "Clove", "Saffron", "Turmeric"],
+        correct: 1
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function renderQuestion() {
+      const q = questions[currentQ];
+      document.getElementById('qTitle').innerText = `Question ${currentQ + 1} of ${questions.length}: ${q.q}`;
+      const btns = document.querySelectorAll('.option-btn');
+      q.options.forEach((opt, idx) => {
+        btns[idx].innerText = opt;
+      });
+    }
+
+    function checkAnswer(selectedIdx) {
+      if (selectedIdx === questions[currentQ].correct) {
+        score++;
+      }
+      currentQ++;
+      if (currentQ < questions.length) {
+        renderQuestion();
+      } else {
+        document.getElementById('qCard').style.display = 'none';
+        document.getElementById('scoreBox').style.display = 'block';
+        document.getElementById('scoreText').innerText = `You scored ${score} out of ${questions.length}!`;
+      }
+    }
+  </script>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Virtual Herbal Garden - Educational Self-Assessment.
+    </div>
+  </footer>
+</body>
+</html>

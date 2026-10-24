@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive 3D Garden Space | Virtual Herbal Garden</title>
+  <meta name="description" content="Explore genuine 3D botanical models of Ayurvedic medicinal plants with 360-degree rotation, zoom, and taxonomic analysis.">
+  <link rel="stylesheet" href="../css/3d_garden.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    .studio-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .studio-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .plant-selector-bar {
+      display: flex;
+      gap: 0.6rem;
+      overflow-x: auto;
+      padding: 0.8rem 0;
+      margin-bottom: 1.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold) var(--card-bg);
+    }
+    .plant-chip {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.6rem 1.2rem;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .plant-chip:hover {
+      background: rgba(64,145,108,0.3);
+      color: #fff;
+    }
+    .plant-chip.active {
+      background: var(--gold);
+      color: #081c15;
+      border-color: var(--gold);
+    }
+    .viewer-frame {
+      position: relative;
+      background: #040d0a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      height: 540px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+    }
+    .model-controls-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      display: flex;
+      gap: 0.6rem;
+      z-index: 10;
+    }
+    .ctrl-btn {
+      background: rgba(8, 28, 21, 0.85);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s;
+    }
+    .ctrl-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .specimen-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .specimen-card h2 {
+      color: var(--gold);
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+    .specimen-card .botanical {
+      color: var(--accent);
+      font-style: italic;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+    .info-section {
+      margin-bottom: 1.2rem;
+    }
+    .info-section h4 {
+      color: var(--gold);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+    .info-section p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .tab-switch {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary-light);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">🌿 Virtual <span>Herbal Garden</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../dashboard.html">Dashboard</a></li>
+      <li><a href="categories.html">Categories</a></li>
+      <li><a href="3d_garden.html" class="active">3D Garden</a></li>
+      <li><a href="quizzes.html">Quiz</a></li>
+      <li><a href="experts.html">Experts</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main style="max-width: 1280px; margin: 2rem auto; padding: 0 2rem;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; margin-bottom:1rem;">
+      <div>
+        <h1 style="color: var(--gold); font-size: 2.2rem; margin-bottom: 0.4rem;">Interactive 3D Botanical Space</h1>
+        <p style="color: var(--text-muted);">Inspect 11 genuine 3D herbal plant specimens reconstructed from verified morphological scans.</p>
+      </div>
+      <div class="tab-switch">
+        <button class="tab-btn active" id="tabStudioBtn" onclick="switchView('studio')"><i class="fas fa-cube"></i> Specimen Studio</button>
+        <button class="tab-btn" id="tabGardenBtn" onclick="switchView('garden')"><i class="fas fa-seedling"></i> 3D Ecosystem</button>
+      </div>
+    </div>
+
+    <!-- SPECIMEN STUDIO VIEW -->
+    <div id="studioView">
+      <div class="plant-selector-bar" id="selectorBar">
+        <!-- Generated by JS -->
+      </div>
+
+      <div class="studio-layout">
+        <div class="viewer-frame">
+          <model-viewer id="mainViewer"
+            src="../models/tulsi.glb"
+            alt="3D model of Tulsi"
+            auto-rotate
+            camera-controls
+            shadow-intensity="1.2"
+            shadow-softness="0.8"
+            exposure="1.0"
+            ar
+            loading="eager">
+            <div slot="poster" style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--gold); flex-direction:column; gap:1rem;">
+              <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+              <span>Loading 3D Specimen Mesh...</span>
+            </div>
+          </model-viewer>
+
+          <div class="model-controls-overlay">
+            <button class="ctrl-btn" id="toggleRotateBtn" onclick="toggleAutoRotate()"><i class="fas fa-sync-alt"></i> Pause Rotation</button>
+            <button class="ctrl-btn" onclick="resetCamera()"><i class="fas fa-compress-arrows-alt"></i> Reset Camera</button>
+          </div>
+        </div>
+
+        <div class="specimen-card" id="specimenCard">
+          <div>
+            <span class="meta-badge" id="cardCategory" style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:12px; background:rgba(212,163,115,0.15); color:var(--gold); display:inline-block; margin-bottom:0.5rem;">Adaptogen & Immunity</span>
+            <h2 id="cardTitle">Tulsi (Holy Basil)</h2>
+            <p class="botanical" id="cardBotanical">Ocimum tenuiflorum</p>
+
+            <div class="info-section">
+              <h4>Botanical Family</h4>
+              <p id="cardFamily">Lamiaceae</p>
+            </div>
+
+            <div class="info-section">
+              <h4>Key Phytochemicals</h4>
+              <p id="cardPhyto">Eugenol, Ursolic acid, Rosmarinic acid, Carvacrol, Linalool</p>
+            </div>
+
+            <div class="info-section">
+              <h4>Therapeutic Mechanism</h4>
+              <p id="cardMechanism">Potent immunomodulatory agent enhancing natural killer (NK) cell activity and attenuating stress-induced neuro-endocrine cascades.</p>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <a href="../plants_html/tulsi.html" id="cardProfileLink" class="nav-btn" style="text-decoration:none; display:block; text-align:center; padding:0.8rem !important;">
+              <i class="fas fa-book-open"></i> View Complete Plant Profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D ECOSYSTEM VIEW -->
+    <div id="gardenView" style="display:none;">
+      <div id="canvas-container">
+        <div class="garden-controls">
+          <h4 style="margin-bottom: 0.3rem;"><i class="fas fa-compass"></i> Ecosystem Navigator</h4>
+          <p style="font-size: 0.8rem; margin-bottom: 0.8rem; color: var(--text-muted);">Drag to orbit space | Scroll to zoom</p>
+          <button onclick="resetCam()"><i class="fas fa-undo"></i> Reset View</button>
+          <button onclick="toggleRotateEco()"><i class="fas fa-sync-alt"></i> Toggle Orbit</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-bottom">
+      &copy; 2026 Virtual Herbal Garden - Department of Computer Engineering, SSBT COET Jalgaon.
+    </div>
+  </footer>
+
+  <script>
+    const PLANTS_3D = [
+      {
+        id: "tulsi",
+        name: "Tulsi (Holy Basil)",
+        botanical: "Ocimum tenuiflorum",
+        family: "Lamiaceae",
+        category: "Adaptogen & Immunity",
+        model: "../models/tulsi.glb",
+        phyto: "Eugenol, Ursolic acid, Rosmarinic acid, Carvacrol, Linalool",
+        mechanism: "Potent immunomodulatory agent enhancing natural killer (NK) cell activity and attenuating stress cascades.",
+        page: "../plants_html/tulsi.html"
+      },
+      {
+        id: "aloevera",
+        name: "Aloe Vera (Ghritkumari)",
+        botanical: "Aloe barbadensis miller",
+        family: "Asphodelaceae",
+        category: "Dermal & Digestive",
+        model: "../models/aloe_vera.glb",
+        phyto: "Acemannan, Aloin, Barbaloin, Bradykinase",
+        mechanism: "Accelerates dermal wound healing, collagen synthesis, and protects epithelial mucosa.",
+        page: "../plants_html/aloevera.html"
+      },
+      {
+        id: "ashwagandha",
+        name: "Ashwagandha",
+        botanical: "Withania somnifera",
+        family: "Solanaceae",
+        category: "Rasayana / Neuro-Endocrine",
+        model: "../models/Ahwagandha.glb",
+        phyto: "Withaferin A, Withanolide D, Sitoindosides",
+        mechanism: "Modulates HPA axis activity, lowering chronic serum cortisol, anxiety, and neuro-inflammation.",
+        page: "../plants_html/ashwagandha.html"
+      },
+      {
+        id: "bacopa",
+        name: "Brahmi (Water Hyssop)",
+        botanical: "Bacopa monnieri",
+        family: "Plantaginaceae",
+        category: "Medhya Rasayana / Nootropic",
+        model: "../models/bacopa_monnieri_plant.glb",
+        phyto: "Bacosides A & B, Bacopasaponins, Betulinic acid",
+        mechanism: "Facilitates synaptic transmission and nerve impulse repair in hippocampal neurons.",
+        page: "../plants_html/bacopa_monnieri.html"
+      },
+      {
+        id: "turmeric",
+        name: "Turmeric (Haridra)",
+        botanical: "Curcuma longa",
+        family: "Zingiberaceae",
+        category: "Anti-Inflammatory",
+        model: "../models/Turmeric.glb",
+        phyto: "Curcumin, Demethoxycurcumin, Turmerones",
+        mechanism: "Inhibits NF-κB inflammatory signaling cascades and suppresses COX-2 enzymes.",
+        page: "../plants_html/turmeric.html"
+      },
+      {
+        id: "cardamom",
+        name: "Cardamom (Elaichi)",
+        botanical: "Elettaria cardamomum",
+        family: "Zingiberaceae",
+        category: "Digestive & Aromatic",
+        model: "../models/Cardamom.glb",
+        phyto: "1,8-Cineole, Terpinyl acetate, Limonene",
+        mechanism: "Relieves gastrointestinal spasms and eradicates volatile oral pathogens.",
+        page: "../plants_html/cardamom.html"
+      },
+      {
+        id: "clove",
+        name: "Clove (Lavanga)",
+        botanical: "Syzygium aromaticum",
+        family: "Myrtaceae",
+        category: "Analgesic & Dental",
+        model: "../models/Clove.glb",
+        phyto: "Eugenol, Eugenyl acetate, β-Caryophyllene",
+        mechanism: "Acts as a potent topical dental local anesthetic and broad-spectrum antimicrobial.",
+        page: "../plants_html/clove.html"
+      },
+      {
+        id: "cinnamon",
+        name: "Cinnamon (Dalchini)",
+        botanical: "Cinnamomum verum",
+        family: "Lauraceae",
+        category: "Glycemic Modulator",
+        model: "../models/Cinnamon.glb",
+        phyto: "Cinnamaldehyde, Cinnamic acid, Proanthocyanidins",
+        mechanism: "Enhances insulin sensitivity and activates cellular GLUT-4 glucose transporters.",
+        page: "../plants_html/cinnamon.html"
+      },
+      {
+        id: "chamomile",
+        name: "Chamomile (Babuna)",
+        botanical: "Matricaria chamomilla",
+        family: "Asteraceae",
+        category: "Sedative & Sleep Aid",
+        model: "../models/chamomile.glb",
+        phyto: "Apigenin, Chamazulene, Bisabolol",
+        mechanism: "Apigenin binds to central benzodiazepine GABA-A receptors, facilitating calming sedative sleep.",
+        page: "../plants_html/chamomile.html"
+      },
+      {
+        id: "barberry",
+        name: "Barberry (Daruharidra)",
+        botanical: "Berberis vulgaris",
+        family: "Berberidaceae",
+        category: "Hepatobiliary Tonic",
+        model: "../models/barberry_plant_in_pot.glb",
+        phyto: "Berberine, Berbamine, Oxyacanthine",
+        mechanism: "Activates cellular AMPK pathway, regulating lipid homeostasis and hepatic glucose release.",
+        page: "../plants_html/barberry.html"
+      },
+      {
+        id: "kalnchoe",
+        name: "Pashanbheda / Miracle Leaf",
+        botanical: "Kalanchoe pinnata",
+        family: "Crassulaceae",
+        category: "Lithotriptic / Kidney Health",
+        model: "../models/kalanchoe_calandiva.glb",
+        phyto: "Bufadienolides, Quercetin, Kaempferol",
+        mechanism: "Exerts proven lithotriptic activity that inhibits calcium oxalate crystal nucleation in kidneys.",
+        page: "../plants_html/kalnchoe.html"
+      }
+    ];
+
+    let currentPlantIndex = 0;
+    const viewer = document.getElementById('mainViewer');
+
+    function initSelector() {
+      const bar = document.getElementById('selectorBar');
+      bar.innerHTML = '';
+      PLANTS_3D.forEach((p, idx) => {
+        const chip = document.createElement('button');
+        chip.className = `plant-chip ${idx === currentPlantIndex ? 'active' : ''}`;
+        chip.innerHTML = `<i class="fas fa-leaf"></i> ${p.name.split(' ')[0]}`;
+        chip.onclick = () => selectPlant(idx);
+        bar.appendChild(chip);
+      });
+    }
+
+    function selectPlant(idx) {
+      currentPlantIndex = idx;
+      const p = PLANTS_3D[idx];
+
+      // Update Viewer
+      viewer.src = p.model;
+      viewer.alt = `3D model of ${p.name}`;
+
+      // Update Card
+      document.getElementById('cardCategory').textContent = p.category;
+      document.getElementById('cardTitle').textContent = p.name;
+      document.getElementById('cardBotanical').textContent = p.botanical;
+      document.getElementById('cardFamily').textContent = p.family;
+      document.getElementById('cardPhyto').textContent = p.phyto;
+      document.getElementById('cardMechanism').textContent = p.mechanism;
+      document.getElementById('cardProfileLink').href = p.page;
+
+      // Update active chip
+      const chips = document.querySelectorAll('.plant-chip');
+      chips.forEach((c, i) => {
+        c.classList.toggle('active', i === idx);
+      });
+    }
+
+    let isAutoRotating = true;
+    function toggleAutoRotate() {
+      isAutoRotating = !isAutoRotating;
+      viewer.autoRotate = isAutoRotating;
+      document.getElementById('toggleRotateBtn').innerHTML = isAutoRotating 
+        ? '<i class="fas fa-sync-alt"></i> Pause Rotation' 
+        : '<i class="fas fa-play"></i> Auto Rotate';
+    }
+
+    function resetCamera() {
+      viewer.cameraOrbit = "0deg 75deg 105%";
+      viewer.fieldOfView = "30deg";
+    }
+
+    function switchView(mode) {
+      if (mode === 'studio') {
+        document.getElementById('studioView').style.display = 'block';
+        document.getElementById('gardenView').style.display = 'none';
+        document.getElementById('tabStudioBtn').classList.add('active');
+        document.getElementById('tabGardenBtn').classList.remove('active');
+      } else {
+        document.getElementById('studioView').style.display = 'none';
+        document.getElementById('gardenView').style.display = 'block';
+        document.getElementById('tabStudioBtn').classList.remove('active');
+        document.getElementById('tabGardenBtn').classList.add('active');
+        if (!window.ecoInitialized) initEcosystem();
+      }
+    }
+
+    // Three.js Ecosystem Scene
+    let ecoScene, ecoCamera, ecoRenderer, ecoAutoRotate = true;
+    function initEcosystem() {
+      window.ecoInitialized = true;
+      const container = document.getElementById('canvas-container');
+      ecoScene = new THREE.Scene();
+      ecoScene.background = new THREE.Color(0x06140f);
+      ecoScene.fog = new THREE.FogExp2(0x06140f, 0.03);
+
+      ecoCamera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+      ecoCamera.position.set(0, 10, 22);
+
+      ecoRenderer = new THREE.WebGLRenderer({ antialias: true });
+      ecoRenderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(ecoRenderer.domElement);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+      ecoScene.add(ambientLight);
+      const dirLight = new THREE.DirectionalLight(0xd4a373, 1.2);
+      dirLight.position.set(10, 20, 10);
+      ecoScene.add(dirLight);
+
+      const groundGeo = new THREE.PlaneGeometry(60, 60);
+      const groundMat = new THREE.MeshStandardMaterial({ color: 0x0f2b1d, roughness: 0.8 });
+      const ground = new THREE.Mesh(groundGeo, groundMat);
+      ground.rotation.x = -Math.PI / 2;
+      ecoScene.add(ground);
+
+      PLANTS_3D.forEach((p, i) => {
+        const angle = (i / PLANTS_3D.length) * Math.PI * 2;
+        const radius = 10 + (i % 2) * 3;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+
+        const stemGeo = new THREE.CylinderGeometry(0.15, 0.25, 3, 8);
+        const stemMat = new THREE.MeshStandardMaterial({ color: 0x2d6a4f });
+        const stem = new THREE.Mesh(stemGeo, stemMat);
+        stem.position.set(x, 1.5, z);
+        ecoScene.add(stem);
+
+        const sphereGeo = new THREE.DodecahedronGeometry(1.2, 1);
+        const sphereMat = new THREE.MeshStandardMaterial({ 
+          color: (i % 3 === 0) ? 0x52b788 : (i % 3 === 1 ? 0x74c69d : 0xd4a373),
+          roughness: 0.4
+        });
+        const foliage = new THREE.Mesh(sphereGeo, sphereMat);
+        foliage.position.set(x, 3.2, z);
+        ecoScene.add(foliage);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (ecoAutoRotate && ecoScene) {
+          ecoScene.rotation.y += 0.003;
+        }
+        ecoRenderer.render(ecoScene, ecoCamera);
+      }
+      animate();
+    }
+
+    function resetCam() {
+      if (ecoCamera) ecoCamera.position.set(0, 10, 22);
+    }
+    function toggleRotateEco() {
+      ecoAutoRotate = !ecoAutoRotate;
+    }
+
+    // Check URL parameters (e.g. ?plant=ashwagandha)
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const plantParam = urlParams.get('plant');
+      if (plantParam) {
+        const targetIdx = PLANTS_3D.findIndex(p => p.id.toLowerCase() === plantParam.toLowerCase());
+        if (targetIdx !== -1) {
+          currentPlantIndex = targetIdx;
+        }
+      }
+      initSelector();
+      selectPlant(currentPlantIndex);
+    });
+  </script>
+</body>
+</html>
