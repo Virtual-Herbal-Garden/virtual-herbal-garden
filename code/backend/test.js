@@ -103,16 +103,22 @@ async function runTests() {
     passed++;
 
     console.log(`\n🎉 All ${passed} backend tests passed successfully!\n`);
+    if (server.closeAllConnections) {
+      server.closeAllConnections();
+    }
     server.close((err) => {
       if (err) {
         console.error('Error closing server:', err);
         process.exit(1);
       }
-      process.exit(0);
+      setTimeout(() => {
+        process.exit(0);
+      }, 50);
     });
   } catch (err) {
     console.error(`\n❌ Test failed:`, err);
     if (server) {
+      if (server.closeAllConnections) server.closeAllConnections();
       server.close(() => process.exit(1));
     } else {
       process.exit(1);
